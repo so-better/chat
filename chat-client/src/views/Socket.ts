@@ -29,11 +29,10 @@ class Socket {
 
 	//心跳检测
 	private heartbeat() {
-		this.timer = setTimeout(() => {
+		this.timer = setInterval(() => {
 			this.send({
 				cmd: 'heartbeat'
 			})
-			this.heartbeat()
 		}, 30000)
 	}
 
@@ -46,14 +45,16 @@ class Socket {
 			})
 			this.isConnecting = true
 		}
-		if (this.timer) {
-			clearTimeout(this.timer)
-			this.timer = null
-		}
 		this.websocket = new WebSocket(this.url)
 		//连接发生错误的回调方法
 		this.websocket.onerror = () => {
 			console.log('%c WebSocket连接错误，尝试重新连接...', 'color:#f30')
+			//关闭定时
+			if (this.timer) {
+				clearInterval(this.timer)
+				this.timer = null
+			}
+			//建立连接
 			this.initSocket(onSuccess, onMessage)
 		}
 		//连接成功建立的回调方法
@@ -72,7 +73,12 @@ class Socket {
 		//连接关闭的回调方法
 		this.websocket.onclose = event => {
 			console.log(`%c WebSocket连接关闭，code是${event.code}`, 'color:#7f8b3a')
-			//不是正常关闭则重新连接
+			//关闭定时
+			if (this.timer) {
+				clearInterval(this.timer)
+				this.timer = null
+			}
+			//非正常情况下关闭需要重新连接
 			if (event.code != 1000) {
 				this.initSocket(onSuccess, onMessage)
 			}

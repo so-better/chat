@@ -118,7 +118,9 @@ const onClose = (server, connection) => {
 	//从聊天室退出
 	if (name) {
 		//广播告诉聊天室内的其他人有人退出
-		const connections = server.connections.filter(conn => conn.data?.name == name)
+		const connections = server.connections.filter(conn => {
+			return conn.data?.name == name && conn != connection
+		})
 		connections.forEach(conn => {
 			send(conn, {
 				cmd: 'exitChatRoom',
