@@ -4,7 +4,7 @@ import vue from '@vitejs/plugin-vue'
 // https://vitejs.dev/config/
 export default defineConfig({
 	//开发或生产环境服务的公共基础路径
-	base: './',
+	base: '/chat/',
 	//需要用到的插件数组
 	plugins: [vue()],
 	envDir: process.cwd(),

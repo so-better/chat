@@ -118,7 +118,7 @@ const createServer = () => {
 				} catch (error) {}
 			})
 		})
-		.listen(3060)
+		.listen(3066)
 	return server
 }
 

@@ -90,4 +90,4 @@ class Socket {
 	}
 }
 
-export const socket = new Socket(import.meta.env.PROD ? 'wss://www.ling0523.cn/chat/' : 'ws://localhost:3060')
+export const socket = new Socket(import.meta.env.PROD ? 'wss://www.ling0523.cn/chat/socket' : 'ws://localhost:3066')
