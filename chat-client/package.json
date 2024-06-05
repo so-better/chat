@@ -1,0 +1,29 @@
+{
+	"name": "chat-client",
+	"private": true,
+	"version": "0.0.0",
+	"type": "module",
+	"scripts": {
+		"dev": "vite",
+		"prod": "vue-tsc && vite build"
+	},
+	"dependencies": {
+		"dap-util": "^1.5.4",
+		"dayjs": "^1.11.11",
+		"mvi-web-plus": "^1.9.18",
+		"vue": "^3.4.21",
+		"vue-router": "^4.3.2",
+		"vuex": "^4.0.2"
+	},
+	"devDependencies": {
+		"@types/node": "^20.14.0",
+		"@types/sockjs-client": "^1.5.4",
+		"@types/stompjs": "^2.3.9",
+		"@vitejs/plugin-vue": "^5.0.4",
+		"less": "^4.2.0",
+		"terser": "^5.31.0",
+		"typescript": "^5.2.2",
+		"vite": "^5.2.0",
+		"vue-tsc": "^2.0.6"
+	}
+}
