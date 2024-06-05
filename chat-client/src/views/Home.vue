@@ -1,21 +1,23 @@
 <template>
-	<!-- PC端 -->
-	<div class="home mvi-hidden-down-xs">
-		<div class="home-wrap mvi-shadow">
-			<div class="home-header">加入聊天室</div>
-			<div class="home-input">
-				<m-input class="mvi-cursor-pointer" size="large" border v-model.trim="name" placeholder="输入聊天室的名字..." :right="{ type: 'arrow-right', color: name ? '#666' : '#bbb' }" @right-click="goChatRoom" @keyup.enter="goChatRoom"></m-input>
-				<div class="home-input-tips">输入聊天室名字后按回车加入聊天室或者点击输入右侧的箭头来加入</div>
+	<div class="page">
+		<!-- PC端 -->
+		<div class="home mvi-hidden-down-xs">
+			<div class="home-wrap mvi-shadow">
+				<div class="home-header">加入聊天室</div>
+				<div class="home-input">
+					<m-input class="mvi-cursor-pointer" size="large" border v-model.trim="name" placeholder="输入聊天室的名字..." :right="{ type: 'arrow-right', color: name ? '#666' : '#bbb' }" @right-click="goChatRoom" @keyup.enter="goChatRoom"></m-input>
+					<div class="home-input-tips">输入聊天室名字后按回车加入聊天室或者点击输入右侧的箭头来加入</div>
+				</div>
 			</div>
 		</div>
-	</div>
-	<!-- 移动端 -->
-	<div class="homem mvi-hidden-up-sm">
-		<div class="homem-header">加入聊天室</div>
-		<div class="homem-input">
-			<div>
-				<m-input size="large" border v-model.trim="name" placeholder="输入聊天室的名字..." :right="{ type: 'arrow-right', color: name ? '#666' : '#bbb' }" @right-click="goChatRoom" @keyup.enter="goChatRoom"></m-input>
-				<div class="homem-input-tips">输入聊天室名字后按回车加入聊天室或者点击输入右侧的箭头来加入</div>
+		<!-- 移动端 -->
+		<div class="homem mvi-hidden-up-sm">
+			<div class="homem-header">加入聊天室</div>
+			<div class="homem-input">
+				<div>
+					<m-input size="large" border v-model.trim="name" placeholder="输入聊天室的名字..." :right="{ type: 'arrow-right', color: name ? '#666' : '#bbb' }" @right-click="goChatRoom" @keyup.enter="goChatRoom"></m-input>
+					<div class="homem-input-tips">输入聊天室名字后按回车加入聊天室或者点击输入右侧的箭头来加入</div>
+				</div>
 			</div>
 		</div>
 	</div>

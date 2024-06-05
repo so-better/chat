@@ -1,188 +1,190 @@
 <template>
-	<!-- PC端 -->
-	<div class="chat mvi-hidden-down-xs">
-		<div class="chat-win mvi-shadow">
-			<div class="chat-header">
-				<span class="chat-name">{{ name }}（{{ userList.length }}）</span>
-				<m-icon @click="exit" class="chat-close" type="switch" size="20px" />
-			</div>
-			<div class="chat-body">
-				<div class="chat-top">
-					<div ref="chatRef" class="chat-records">
-						<div class="chat-records-item" v-for="item in messageList">
-							<div v-if="item.isNotify" class="chat-records-notify">
-								<span>{{ dayjs(item.timestamp).format('YYYY-MM-DD hh:mm:ss') }}</span>
-								<span>{{ item.message }}</span>
-							</div>
-							<template v-else>
-								<div class="chat-records-header">
-									<span>{{ item.userName }}：</span>
+	<div class="page">
+		<!-- PC端 -->
+		<div class="chat mvi-hidden-down-xs">
+			<div class="chat-win mvi-shadow">
+				<div class="chat-header">
+					<span class="chat-name">{{ name }}（{{ userList.length }}）</span>
+					<m-icon @click="exit" class="chat-close" type="switch" size="20px" />
+				</div>
+				<div class="chat-body">
+					<div class="chat-top">
+						<div ref="chatRef" class="chat-records">
+							<div class="chat-records-item" v-for="item in messageList">
+								<div v-if="item.isNotify" class="chat-records-notify">
 									<span>{{ dayjs(item.timestamp).format('YYYY-MM-DD hh:mm:ss') }}</span>
+									<span>{{ item.message }}</span>
 								</div>
-								<div v-if="item.message" class="chat-records-message">{{ item.message }}</div>
-								<div v-else-if="item.filePath" class="chat-records-file">
-									<!-- 图片 -->
-									<m-image v-if="item.fileType == 'image'" :src="item.filePath" fit="response" class="chat-records-image mvi-cursor-pointer" @click="openPreview(item.filePath)"></m-image>
-									<!-- 视频 -->
-									<video v-else-if="item.fileType == 'video'" :src="item.filePath" autoplay controls muted class="chat-records-video"></video>
-									<!-- 音频 -->
-									<audio v-else-if="item.fileType == 'audio'" controls muted autoplay></audio>
-									<!-- 其他 -->
-									<a v-else class="chat-records-link" :href="item.filePath" :download="item.fileName" target="_blank">
-										<span>{{ item.fileName }}</span>
-										<!-- pdf -->
-										<img v-if="item.fileType == 'pdf'" src="../assets/file/PDF.svg" />
-										<!-- 7z -->
-										<img v-else-if="item.fileType == '7z'" src="../assets/file/7Z.svg" />
-										<!-- zip -->
-										<img v-else-if="item.fileType == 'zip'" src="../assets/file/ZIP.svg" />
-										<!-- doc -->
-										<img v-else-if="item.fileType == 'doc'" src="../assets/file/DOC.svg" />
-										<!-- docx -->
-										<img v-else-if="item.fileType == 'docx'" src="../assets/file/DOCX.svg" />
-										<!-- exe -->
-										<img v-else-if="item.fileType == 'exe'" src="../assets/file/EXE.svg" />
-										<!-- html -->
-										<img v-else-if="item.fileType == 'html'" src="../assets/file/HTML.svg" />
-										<!-- ppt -->
-										<img v-else-if="item.fileType == 'ppt'" src="../assets/file/PPT.svg" />
-										<!-- rar -->
-										<img v-else-if="item.fileType == 'rar'" src="../assets/file/RAR.svg" />
-										<!-- txt -->
-										<img v-else-if="item.fileType == 'txt'" src="../assets/file/TXT.svg" />
-										<!-- wps -->
-										<img v-else-if="item.fileType == 'wps'" src="../assets/file/WPS.svg" />
-										<!-- xls -->
-										<img v-else-if="item.fileType == 'xls'" src="../assets/file/XLS.svg" />
-										<!-- xlsx -->
-										<img v-else-if="item.fileType == 'xlsx'" src="../assets/file/XLSX.svg" />
-										<!-- 通用 -->
-										<img v-else src="../assets/file/TONGYONG.svg" />
-									</a>
-								</div>
-							</template>
+								<template v-else>
+									<div class="chat-records-header">
+										<span>{{ item.userName }}：</span>
+										<span>{{ dayjs(item.timestamp).format('YYYY-MM-DD hh:mm:ss') }}</span>
+									</div>
+									<div v-if="item.message" class="chat-records-message">{{ item.message }}</div>
+									<div v-else-if="item.filePath" class="chat-records-file">
+										<!-- 图片 -->
+										<m-image v-if="item.fileType == 'image'" :src="item.filePath" fit="response" class="chat-records-image mvi-cursor-pointer" @click="openPreview(item.filePath)"></m-image>
+										<!-- 视频 -->
+										<video v-else-if="item.fileType == 'video'" :src="item.filePath" autoplay controls muted class="chat-records-video"></video>
+										<!-- 音频 -->
+										<audio v-else-if="item.fileType == 'audio'" controls muted autoplay></audio>
+										<!-- 其他 -->
+										<a v-else class="chat-records-link" :href="item.filePath" :download="item.fileName" target="_blank">
+											<span>{{ item.fileName }}</span>
+											<!-- pdf -->
+											<img v-if="item.fileType == 'pdf'" src="../assets/file/PDF.svg" />
+											<!-- 7z -->
+											<img v-else-if="item.fileType == '7z'" src="../assets/file/7Z.svg" />
+											<!-- zip -->
+											<img v-else-if="item.fileType == 'zip'" src="../assets/file/ZIP.svg" />
+											<!-- doc -->
+											<img v-else-if="item.fileType == 'doc'" src="../assets/file/DOC.svg" />
+											<!-- docx -->
+											<img v-else-if="item.fileType == 'docx'" src="../assets/file/DOCX.svg" />
+											<!-- exe -->
+											<img v-else-if="item.fileType == 'exe'" src="../assets/file/EXE.svg" />
+											<!-- html -->
+											<img v-else-if="item.fileType == 'html'" src="../assets/file/HTML.svg" />
+											<!-- ppt -->
+											<img v-else-if="item.fileType == 'ppt'" src="../assets/file/PPT.svg" />
+											<!-- rar -->
+											<img v-else-if="item.fileType == 'rar'" src="../assets/file/RAR.svg" />
+											<!-- txt -->
+											<img v-else-if="item.fileType == 'txt'" src="../assets/file/TXT.svg" />
+											<!-- wps -->
+											<img v-else-if="item.fileType == 'wps'" src="../assets/file/WPS.svg" />
+											<!-- xls -->
+											<img v-else-if="item.fileType == 'xls'" src="../assets/file/XLS.svg" />
+											<!-- xlsx -->
+											<img v-else-if="item.fileType == 'xlsx'" src="../assets/file/XLSX.svg" />
+											<!-- 通用 -->
+											<img v-else src="../assets/file/TONGYONG.svg" />
+										</a>
+									</div>
+								</template>
+							</div>
 						</div>
-					</div>
-					<div class="chat-users">
-						<div class="chat-users-header"><m-icon type="user-group-alt" class="mvi-mr-1" />在线人员</div>
-						<div class="chat-users-list">
-							<div v-for="item in userList">
-								<m-icon type="user-alt" />
-								<span class="mvi-ml-1">{{ item }}{{ item == userName ? '（自己）' : '' }}</span>
+						<div class="chat-users">
+							<div class="chat-users-header"><m-icon type="user-group-alt" class="mvi-mr-1" />在线人员</div>
+							<div class="chat-users-list">
+								<div v-for="item in userList">
+									<m-icon type="user-alt" />
+									<span class="mvi-ml-1">{{ item }}{{ item == userName ? '（自己）' : '' }}</span>
+								</div>
 							</div>
 						</div>
 					</div>
-				</div>
-				<div class="chat-bottom">
-					<div class="chat-input">
-						<textarea v-model.trim="message" @keyup.shift.enter.exact="insertBreak" @keydown.enter.prevent.exact @keyup.enter.exact="sendMessage" placeholder="在此输入..."></textarea>
-					</div>
-					<div class="chat-btn">
-						<m-button v-upload="uploadOptions" size="small" class="mvi-mr-2">
-							<m-icon type="folder-open-alt"></m-icon>
-							<span class="mvi-ml-1">发送文件</span>
-						</m-button>
-						<m-button :disabled="!message" @click="sendMessage" size="small" type="primary">
-							<m-icon type="send-alt" />
-							<span class="mvi-ml-1">Enter</span>
-						</m-button>
+					<div class="chat-bottom">
+						<div class="chat-input">
+							<textarea v-model.trim="message" @keyup.shift.enter.exact="insertBreak" @keydown.enter.prevent.exact @keyup.enter.exact="sendMessage" placeholder="在此输入..."></textarea>
+						</div>
+						<div class="chat-btn">
+							<m-button v-upload="uploadOptions" size="small" class="mvi-mr-2">
+								<m-icon type="folder-open-alt"></m-icon>
+								<span class="mvi-ml-1">发送文件</span>
+							</m-button>
+							<m-button :disabled="!message" @click="sendMessage" size="small" type="primary">
+								<m-icon type="send-alt" />
+								<span class="mvi-ml-1">Enter</span>
+							</m-button>
+						</div>
 					</div>
 				</div>
 			</div>
 		</div>
-	</div>
-	<!-- 移动端 -->
-	<div class="chatm mvi-hidden-up-sm">
-		<div class="chatm-header">
-			<span class="chatm-name">{{ name }}（{{ userList.length }}）</span>
-			<div>
-				<m-icon @click="peopleShow = !peopleShow" class="mvi-mr-4" type="user-group-alt" size="18px" />
-				<m-icon @click="exit" type="switch" size="18px" />
-			</div>
-		</div>
-		<div class="chatm-records" ref="chatmRef">
-			<div class="chatm-records-item" v-for="item in messageList">
-				<div v-if="item.isNotify" class="chatm-records-notify">
-					<span>{{ dayjs(item.timestamp).format('YYYY-MM-DD hh:mm:ss') }}</span>
-					<span>{{ item.message }}</span>
+		<!-- 移动端 -->
+		<div class="chatm mvi-hidden-up-sm">
+			<div class="chatm-header">
+				<span class="chatm-name">{{ name }}（{{ userList.length }}）</span>
+				<div>
+					<m-icon @click="peopleShow = !peopleShow" class="mvi-mr-4" type="user-group-alt" size="18px" />
+					<m-icon @click="exit" type="switch" size="18px" />
 				</div>
-				<template v-else>
-					<div class="chatm-records-header">
-						<span>{{ item.userName }}：</span>
+			</div>
+			<div class="chatm-records" ref="chatmRef">
+				<div class="chatm-records-item" v-for="item in messageList">
+					<div v-if="item.isNotify" class="chatm-records-notify">
 						<span>{{ dayjs(item.timestamp).format('YYYY-MM-DD hh:mm:ss') }}</span>
+						<span>{{ item.message }}</span>
 					</div>
-					<div v-if="item.message" class="chatm-records-message">{{ item.message }}</div>
-					<div v-else-if="item.filePath" class="chatm-records-file">
-						<!-- 图片 -->
-						<m-image v-if="item.fileType == 'image'" :src="item.filePath" class="chatm-records-image" fit="response" @click="openPreview(item.filePath)"></m-image>
-						<!-- 视频 -->
-						<video v-else-if="item.fileType == 'video'" :src="item.filePath" autoplay controls muted class="chatm-records-video"></video>
-						<!-- 音频 -->
-						<audio v-else-if="item.fileType == 'audio'" controls muted autoplay></audio>
-						<!-- 其他 -->
-						<a v-else class="chatm-records-link" :href="item.filePath" :download="item.fileName" target="_blank">
-							<span>{{ item.fileName }}</span>
-							<!-- pdf -->
-							<img v-if="item.fileType == 'pdf'" src="../assets/file/PDF.svg" />
-							<!-- 7z -->
-							<img v-else-if="item.fileType == '7z'" src="../assets/file/7Z.svg" />
-							<!-- zip -->
-							<img v-else-if="item.fileType == 'zip'" src="../assets/file/ZIP.svg" />
-							<!-- doc -->
-							<img v-else-if="item.fileType == 'doc'" src="../assets/file/DOC.svg" />
-							<!-- docx -->
-							<img v-else-if="item.fileType == 'docx'" src="../assets/file/DOCX.svg" />
-							<!-- exe -->
-							<img v-else-if="item.fileType == 'exe'" src="../assets/file/EXE.svg" />
-							<!-- html -->
-							<img v-else-if="item.fileType == 'html'" src="../assets/file/HTML.svg" />
-							<!-- ppt -->
-							<img v-else-if="item.fileType == 'ppt'" src="../assets/file/PPT.svg" />
-							<!-- rar -->
-							<img v-else-if="item.fileType == 'rar'" src="../assets/file/RAR.svg" />
-							<!-- txt -->
-							<img v-else-if="item.fileType == 'txt'" src="../assets/file/TXT.svg" />
-							<!-- wps -->
-							<img v-else-if="item.fileType == 'wps'" src="../assets/file/WPS.svg" />
-							<!-- xls -->
-							<img v-else-if="item.fileType == 'xls'" src="../assets/file/XLS.svg" />
-							<!-- xlsx -->
-							<img v-else-if="item.fileType == 'xlsx'" src="../assets/file/XLSX.svg" />
-							<!-- 通用 -->
-							<img v-else src="../assets/file/TONGYONG.svg" />
-						</a>
-					</div>
-				</template>
+					<template v-else>
+						<div class="chatm-records-header">
+							<span>{{ item.userName }}：</span>
+							<span>{{ dayjs(item.timestamp).format('YYYY-MM-DD hh:mm:ss') }}</span>
+						</div>
+						<div v-if="item.message" class="chatm-records-message">{{ item.message }}</div>
+						<div v-else-if="item.filePath" class="chatm-records-file">
+							<!-- 图片 -->
+							<m-image v-if="item.fileType == 'image'" :src="item.filePath" class="chatm-records-image" fit="response" @click="openPreview(item.filePath)"></m-image>
+							<!-- 视频 -->
+							<video v-else-if="item.fileType == 'video'" :src="item.filePath" autoplay controls muted class="chatm-records-video"></video>
+							<!-- 音频 -->
+							<audio v-else-if="item.fileType == 'audio'" controls muted autoplay></audio>
+							<!-- 其他 -->
+							<a v-else class="chatm-records-link" :href="item.filePath" :download="item.fileName" target="_blank">
+								<span>{{ item.fileName }}</span>
+								<!-- pdf -->
+								<img v-if="item.fileType == 'pdf'" src="../assets/file/PDF.svg" />
+								<!-- 7z -->
+								<img v-else-if="item.fileType == '7z'" src="../assets/file/7Z.svg" />
+								<!-- zip -->
+								<img v-else-if="item.fileType == 'zip'" src="../assets/file/ZIP.svg" />
+								<!-- doc -->
+								<img v-else-if="item.fileType == 'doc'" src="../assets/file/DOC.svg" />
+								<!-- docx -->
+								<img v-else-if="item.fileType == 'docx'" src="../assets/file/DOCX.svg" />
+								<!-- exe -->
+								<img v-else-if="item.fileType == 'exe'" src="../assets/file/EXE.svg" />
+								<!-- html -->
+								<img v-else-if="item.fileType == 'html'" src="../assets/file/HTML.svg" />
+								<!-- ppt -->
+								<img v-else-if="item.fileType == 'ppt'" src="../assets/file/PPT.svg" />
+								<!-- rar -->
+								<img v-else-if="item.fileType == 'rar'" src="../assets/file/RAR.svg" />
+								<!-- txt -->
+								<img v-else-if="item.fileType == 'txt'" src="../assets/file/TXT.svg" />
+								<!-- wps -->
+								<img v-else-if="item.fileType == 'wps'" src="../assets/file/WPS.svg" />
+								<!-- xls -->
+								<img v-else-if="item.fileType == 'xls'" src="../assets/file/XLS.svg" />
+								<!-- xlsx -->
+								<img v-else-if="item.fileType == 'xlsx'" src="../assets/file/XLSX.svg" />
+								<!-- 通用 -->
+								<img v-else src="../assets/file/TONGYONG.svg" />
+							</a>
+						</div>
+					</template>
+				</div>
+			</div>
+			<div class="chatm-footer">
+				<div class="chatm-input">
+					<textarea v-model.trim="message" @keyup.shift.enter.exact="insertBreak" @keydown.enter.prevent.exact @keyup.enter.exact="sendMessage" placeholder="在此输入..."></textarea>
+				</div>
+				<div class="chatm-btn">
+					<m-button v-upload="uploadOptions" size="small" class="mvi-mr-2">
+						<m-icon type="folder-open-alt"></m-icon>
+						<span class="mvi-ml-1">发送文件</span>
+					</m-button>
+					<m-button :disabled="!message" @click="sendMessage" size="small" type="primary">
+						<m-icon type="send-alt" />
+						<span class="mvi-ml-1">Enter</span>
+					</m-button>
+				</div>
 			</div>
 		</div>
-		<div class="chatm-footer">
-			<div class="chatm-input">
-				<textarea v-model.trim="message" @keyup.shift.enter.exact="insertBreak" @keydown.enter.prevent.exact @keyup.enter.exact="sendMessage" placeholder="在此输入..."></textarea>
+		<!-- 图片预览 -->
+		<m-image-preview mount-el="#app" v-model="previewShow" closable :images="previewImages"></m-image-preview>
+		<!-- 移动端人员在线列表弹窗 -->
+		<m-popup mount-el="#app" v-model="peopleShow" placement="right" closable show-times width="180px">
+			<div class="chatm-users-header"><m-icon type="user-group-alt" class="mvi-mr-1" />在线人员</div>
+			<div class="chatm-users-list">
+				<div v-for="item in userList">
+					<m-icon type="user-alt" />
+					<span class="mvi-ml-1">{{ item }}{{ item == userName ? '（自己）' : '' }}</span>
+				</div>
 			</div>
-			<div class="chatm-btn">
-				<m-button v-upload="uploadOptions" size="small" class="mvi-mr-2">
-					<m-icon type="folder-open-alt"></m-icon>
-					<span class="mvi-ml-1">发送文件</span>
-				</m-button>
-				<m-button :disabled="!message" @click="sendMessage" size="small" type="primary">
-					<m-icon type="send-alt" />
-					<span class="mvi-ml-1">Enter</span>
-				</m-button>
-			</div>
-		</div>
+		</m-popup>
 	</div>
-	<!-- 图片预览 -->
-	<m-image-preview mount-el="#app" v-model="previewShow" closable :images="previewImages"></m-image-preview>
-	<!-- 移动端人员在线列表弹窗 -->
-	<m-popup mount-el="#app" v-model="peopleShow" placement="right" closable show-times width="180px">
-		<div class="chatm-users-header"><m-icon type="user-group-alt" class="mvi-mr-1" />在线人员</div>
-		<div class="chatm-users-list">
-			<div v-for="item in userList">
-				<m-icon type="user-alt" />
-				<span class="mvi-ml-1">{{ item }}{{ item == userName ? '（自己）' : '' }}</span>
-			</div>
-		</div>
-	</m-popup>
 </template>
 <script setup lang="ts">
 import dayjs from 'dayjs'
