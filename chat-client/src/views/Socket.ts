@@ -16,6 +16,9 @@ class Socket {
 	private isConnecting: boolean = false
 	//socket地址
 	private url: string
+	//计时器
+	private timer: any = null
+
 	constructor(url: string) {
 		this.url = url
 		//监听窗口关闭事件，当窗口关闭时，主动去关闭websocket连接，防止连接还没断开就关闭窗口，server端会抛异常。
@@ -26,7 +29,7 @@ class Socket {
 
 	//心跳检测
 	private heartbeat() {
-		setTimeout(() => {
+		this.timer = setTimeout(() => {
 			this.send({
 				cmd: 'heartbeat'
 			})
@@ -42,6 +45,10 @@ class Socket {
 				message: '正在连接...'
 			})
 			this.isConnecting = true
+		}
+		if (this.timer) {
+			clearTimeout(this.timer)
+			this.timer = null
 		}
 		this.websocket = new WebSocket(this.url)
 		//连接发生错误的回调方法
@@ -64,7 +71,7 @@ class Socket {
 		}
 		//连接关闭的回调方法
 		this.websocket.onclose = event => {
-			console.log('%c WebSocket连接关闭', 'color:#7f8b3a')
+			console.log(`%c WebSocket连接关闭，code是${event.code}`, 'color:#7f8b3a')
 			//不是正常关闭则重新连接
 			if (event.code != 1000) {
 				this.initSocket(onSuccess, onMessage)
