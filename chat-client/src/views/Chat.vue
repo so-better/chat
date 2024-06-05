@@ -361,26 +361,13 @@ const getFileType = (file: File) => {
 }
 //输入名称弹窗方法
 const showPrompt = () => {
-	let prompt: Promise<{ ok: boolean; value: string }> | null = null
-	if (window.innerWidth >= 640) {
-		prompt = Dialog.Prompt({
-			title: '起个好名字',
-			message: '让别人知道你是谁：',
-			input: {
-				placeholder: '输入一个名字...'
-			}
-		})
-	} else {
-		prompt = Dialog.prompt({
-			title: '起个好名字',
-			message: '让别人知道你是谁',
-			input: {
-				placeholder: '输入一个名字...'
-			},
-			ios: true
-		})
-	}
-	prompt.then(res => {
+	Dialog.Prompt({
+		title: '起个好名字',
+		message: '让别人知道你是谁：',
+		input: {
+			placeholder: '输入一个名字...'
+		}
+	}).then(res => {
 		if (res.ok && res.value) {
 			store.commit('userName', res.value)
 		} else {
@@ -390,28 +377,18 @@ const showPrompt = () => {
 }
 //退出聊天室
 const exit = () => {
-	let confirm: Promise<boolean> | null = null
-	if (window.innerWidth >= 640) {
-		confirm = Dialog.Confirm({
-			title: '确定退出聊天室吗？',
-			message: '退出后无法再与聊天室内的成员发送消息',
-			btns: {
-				ok: {
-					size: 'small'
-				},
-				cancel: {
-					size: 'small'
-				}
+	Dialog.Confirm({
+		title: '确定退出聊天室吗？',
+		message: '退出后无法再与聊天室内的成员发送消息',
+		btns: {
+			ok: {
+				size: 'small'
+			},
+			cancel: {
+				size: 'small'
 			}
-		})
-	} else {
-		confirm = Dialog.confirm({
-			title: '确定退出聊天室吗？',
-			message: '退出后无法再与聊天室内的成员发送消息',
-			ios: true
-		})
-	}
-	confirm.then(res => {
+		}
+	}).then(res => {
 		if (res) {
 			router.replace({
 				name: 'home'

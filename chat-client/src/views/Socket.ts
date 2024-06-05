@@ -1,4 +1,5 @@
-import { Toast } from 'mvi-web-plus'
+import { Toast, Dialog } from 'mvi-web-plus'
+import router from '../router'
 
 export type SocketDataType = {
 	//命令
@@ -78,12 +79,26 @@ class Socket {
 				clearInterval(this.timer)
 				this.timer = null
 			}
-			//非正常情况下关闭1s后进行重新连接
-			if (event.code != 1000) {
-				setTimeout(() => {
+			Dialog.Confirm({
+				title: '连接已经断开',
+				message: '是否需要重新连接？',
+				btns: {
+					ok: {
+						size: 'small'
+					},
+					cancel: {
+						size: 'small'
+					}
+				}
+			}).then(res => {
+				if (res) {
 					this.initSocket(onSuccess, onMessage)
-				}, 1000)
-			}
+				} else {
+					router.replace({
+						name: 'home'
+					})
+				}
+			})
 		}
 	}
 
