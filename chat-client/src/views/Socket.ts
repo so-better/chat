@@ -79,26 +79,33 @@ class Socket {
 				clearInterval(this.timer)
 				this.timer = null
 			}
-			Dialog.Confirm({
-				title: '连接已经断开',
-				message: '是否需要重新连接？',
-				btns: {
-					ok: {
-						size: 'small'
-					},
-					cancel: {
-						size: 'small'
-					}
-				}
-			}).then(res => {
-				if (res) {
+			//解决时间长会断开的问题
+			if (event.code == 1006) {
+				setTimeout(() => {
 					this.initSocket(onSuccess, onMessage)
-				} else {
-					router.replace({
-						name: 'home'
-					})
-				}
-			})
+				}, 1000)
+			} else {
+				Dialog.Confirm({
+					title: '连接已经断开',
+					message: '是否需要重新连接？',
+					btns: {
+						ok: {
+							size: 'small'
+						},
+						cancel: {
+							size: 'small'
+						}
+					}
+				}).then(res => {
+					if (res) {
+						this.initSocket(onSuccess, onMessage)
+					} else {
+						router.replace({
+							name: 'home'
+						})
+					}
+				})
+			}
 		}
 	}
 
