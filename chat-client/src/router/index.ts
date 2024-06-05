@@ -1,6 +1,6 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHashHistory } from 'vue-router'
 
-const routerHistory = createWebHistory(import.meta.env.BASE_URL)
+const routerHistory = createWebHashHistory(import.meta.env.BASE_URL)
 const router = createRouter({
 	history: routerHistory,
 	routes: [
