@@ -8,3 +8,36 @@
 		background: #fff !important;
 	}
 }
+
+.v-codemirror {
+	height: 70vh !important;
+	font-size: 16px;
+	border-radius: 4px !important;
+}
+
+.v-codemirror .cm-editor {
+	height: 70vh !important;
+	border-radius: 4px !important;
+}
+
+.v-codemirror .cm-scroller {
+	font-family: 'Consolas' !important;
+	border-radius: 4px !important;
+}
+
+.v-codemirror .cm-scroller::-webkit-scrollbar-track {
+	background: #282c34;
+}
+
+.v-codemirror .cm-focused {
+	outline: none !important;
+}
+
+.readonly {
+	&.v-codemirror {
+		height: 200px !important;
+		.cm-editor {
+			height: 200px !important;
+		}
+	}
+}

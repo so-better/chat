@@ -13,7 +13,12 @@
 		"mvi-web-plus": "^1.9.18",
 		"vue": "^3.4.21",
 		"vue-router": "^4.3.2",
-		"vuex": "^4.0.2"
+		"vuex": "^4.0.2",
+		"vue-codemirror": "^6.1.1",
+		"@codemirror/lang-html": "^6.4.2",
+		"@codemirror/lang-json": "^6.0.1",
+		"@codemirror/lang-vue": "^0.1.1",
+		"@codemirror/theme-one-dark": "^6.1.1"
 	},
 	"devDependencies": {
 		"@types/node": "^20.14.0",

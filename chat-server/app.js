@@ -87,6 +87,28 @@ const onMessage = (server, connection, data) => {
 		pushHistory(connection.data.name, returnData)
 		return
 	}
+	//有人发送代码
+	if (data.cmd == 'code') {
+		//广播告诉聊天室内的其他人有新消息
+		const connections = server.connections.filter(conn => conn.data?.name == connection.data.name)
+		const returnData = {
+			//发送消息的人
+			userName: connection.data.userName,
+			//发送消息的时间
+			timeStamp: Date.now(),
+			//发送的代码
+			code: data.data.code
+		}
+		connections.forEach(conn => {
+			send(conn, {
+				cmd: 'code',
+				data: returnData
+			})
+		})
+		//消息保存
+		pushHistory(connection.data.name, returnData)
+		return
+	}
 }
 
 //连接关闭

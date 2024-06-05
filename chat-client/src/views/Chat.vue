@@ -21,6 +21,9 @@
 										<span>{{ dayjs(item.timestamp).format('YYYY-MM-DD hh:mm:ss') }}</span>
 									</div>
 									<div v-if="item.message" class="chat-records-message">{{ item.message }}</div>
+									<div v-else-if="item.code" class="chat-records-code">
+										<span @click="openCodeModal(false, item.code)">点击查看代码内容</span>
+									</div>
 									<div v-else-if="item.filePath" class="chat-records-file">
 										<!-- 图片 -->
 										<m-image v-if="item.fileType == 'image'" :src="item.filePath" fit="response" class="chat-records-image mvi-cursor-pointer" @click="openPreview(item.filePath)"></m-image>
@@ -79,10 +82,16 @@
 							<textarea v-model.trim="message" @keyup.shift.enter.exact="insertBreak" @keydown.enter.prevent.exact @keyup.enter.exact="sendMessage" placeholder="在此输入..."></textarea>
 						</div>
 						<div class="chat-btn">
-							<m-button v-upload="uploadOptions" size="small" class="mvi-mr-2">
-								<m-icon type="folder-open-alt"></m-icon>
-								<span class="mvi-ml-1">发送文件</span>
-							</m-button>
+							<m-tooltip class="mvi-mr-2" trigger="hover" title="发送代码片段">
+								<m-button @click="openCodeModal(true)" size="small" type="error">
+									<span class="mvi-px-1"><m-icon type="code" /></span>
+								</m-button>
+							</m-tooltip>
+							<m-tooltip class="mvi-mr-2" trigger="hover" title="发送文件">
+								<m-button v-upload="uploadOptions" size="small" type="success">
+									<span class="mvi-px-1"><m-icon type="folder" /></span>
+								</m-button>
+							</m-tooltip>
 							<m-button :disabled="!message" @click="sendMessage" size="small" type="primary">
 								<m-icon type="send-alt" />
 								<span class="mvi-ml-1">Enter</span>
@@ -113,6 +122,9 @@
 							<span>{{ dayjs(item.timestamp).format('YYYY-MM-DD hh:mm:ss') }}</span>
 						</div>
 						<div v-if="item.message" class="chatm-records-message">{{ item.message }}</div>
+						<div v-else-if="item.code" class="chatm-records-code">
+							<span @click="openCodeModal(false, item.code)">点击查看代码内容</span>
+						</div>
 						<div v-else-if="item.filePath" class="chatm-records-file">
 							<!-- 图片 -->
 							<m-image v-if="item.fileType == 'image'" :src="item.filePath" class="chatm-records-image" fit="response" @click="openPreview(item.filePath)"></m-image>
@@ -161,9 +173,11 @@
 					<textarea v-model.trim="message" @keyup.shift.enter.exact="insertBreak" @keydown.enter.prevent.exact @keyup.enter.exact="sendMessage" placeholder="在此输入..."></textarea>
 				</div>
 				<div class="chatm-btn">
-					<m-button v-upload="uploadOptions" size="small" class="mvi-mr-2">
-						<m-icon type="folder-open-alt"></m-icon>
-						<span class="mvi-ml-1">发送文件</span>
+					<m-button @click="openCodeModal(true)" size="small" type="error" class="mvi-mr-2">
+						<span class="mvi-px-1"><m-icon type="code" /></span>
+					</m-button>
+					<m-button v-upload="uploadOptions" size="small" type="success" class="mvi-mr-2">
+						<span class="mvi-px-1"><m-icon type="folder" /></span>
 					</m-button>
 					<m-button :disabled="!message" @click="sendMessage" size="small" type="primary">
 						<m-icon type="send-alt" />
@@ -173,9 +187,9 @@
 			</div>
 		</div>
 		<!-- 图片预览 -->
-		<m-image-preview mount-el="#app" v-model="previewShow" closable :images="previewImages"></m-image-preview>
+		<m-image-preview mount-el="body" v-model="previewShow" closable :images="previewImages"></m-image-preview>
 		<!-- 移动端人员在线列表弹窗 -->
-		<m-popup mount-el="#app" v-model="peopleShow" placement="right" closable show-times width="180px">
+		<m-popup mount-el="body" v-model="peopleShow" placement="right" closable show-times width="180px">
 			<div class="chatm-users-header"><m-icon type="user-group-alt" class="mvi-mr-1" />在线人员</div>
 			<div class="chatm-users-list">
 				<div v-for="item in userList">
@@ -184,6 +198,16 @@
 				</div>
 			</div>
 		</m-popup>
+		<!-- 代码片段弹窗 -->
+		<m-modal v-model="codeShow" closable show-times title="代码片段" width="90%" mount-el="body">
+			<VueCodemirror :disabled="!isCodeEdit" v-model="codeValue" autofocus placeholder="输入代码..." :tabSize="4" :extensions="extensions"></VueCodemirror>
+			<template #footer v-if="isCodeEdit">
+				<m-button :disabled="!codeValue" @click="sendCode" size="small" type="primary">
+					<m-icon type="send-alt" />
+					<span class="mvi-ml-1">Enter</span>
+				</m-button>
+			</template>
+		</m-modal>
 	</div>
 </template>
 <script setup lang="ts">
@@ -195,6 +219,8 @@ import { useStore } from 'vuex'
 import Dap from 'dap-util'
 import { socket, SocketDataType } from './Socket'
 import { customNotify } from './Notification'
+import { vue } from '@codemirror/lang-vue'
+import { oneDark } from '@codemirror/theme-one-dark'
 const route = useRoute()
 const store = useStore()
 const router = useRouter()
@@ -227,12 +253,20 @@ const uploadOptions = ref<UploadOptionsType>({
 		Toast.hideToast()
 	}
 })
+//codemirror配置
+const extensions = ref<any[]>([[vue(), oneDark]])
 //页面是否激活
 const isPageActive = ref<boolean>(true)
 //人员列表弹窗是否显示
 const peopleShow = ref<boolean>(false)
 //图片预览弹窗是否显示
 const previewShow = ref<boolean>(false)
+//代码弹窗是否显示
+const codeShow = ref<boolean>(false)
+//代码内容
+const codeValue = ref('')
+//代码是否可编辑
+const isCodeEdit = ref<boolean>(true)
 //房间名称
 const name = computed(() => {
 	return decodeURIComponent(route.params.name as string)
@@ -252,6 +286,7 @@ const messageList = ref<
 		filePath?: string //文件路径
 		fileName?: string //文件名称
 		fileType?: string //文件类型
+		code?: string //代码
 		isNotify: boolean //是否通知
 	}[]
 >([])
@@ -398,6 +433,33 @@ const sendMessage = () => {
 	})
 	message.value = ''
 }
+//打开代码片段弹窗
+const openCodeModal = (isEdit: boolean, code: string | undefined = '') => {
+	isCodeEdit.value = isEdit
+	if (isCodeEdit.value) {
+		codeValue.value = ''
+	} else {
+		codeValue.value = code
+	}
+	codeShow.value = true
+}
+//发送代码片段
+const sendCode = () => {
+	if (!codeValue.value) {
+		return
+	}
+	if (!isCodeEdit.value) {
+		return
+	}
+	socket.send({
+		cmd: 'code',
+		data: {
+			code: codeValue.value
+		}
+	})
+	codeValue.value = ''
+	codeShow.value = false
+}
 //换行
 const insertBreak = (e: InputEvent) => {
 	message.value += '\n'
@@ -427,6 +489,8 @@ const handleMessage = (data: SocketDataType) => {
 		userList.value = data.data!.userList as string[]
 		//给新加入的人恢复聊天记录
 		if (data.data!.userName == userName.value) {
+			//先清除之前的聊天内容
+			messageList.value = []
 			data.data!.history.forEach((item: any) => {
 				//文件类型消息
 				if (item.filePath) {
@@ -435,6 +499,15 @@ const handleMessage = (data: SocketDataType) => {
 						fileType: item.fileType,
 						fileName: item.fileName,
 						filePath: item.filePath,
+						timestamp: item.timeStamp,
+						isNotify: false
+					})
+				}
+				//代码消息
+				else if (item.code) {
+					messageList.value.push({
+						userName: item.userName,
+						code: item.code,
 						timestamp: item.timeStamp,
 						isNotify: false
 					})
@@ -456,7 +529,8 @@ const handleMessage = (data: SocketDataType) => {
 			timestamp: data.data!.timeStamp,
 			isNotify: true
 		})
-		if (!isPageActive.value) {
+		//给其他人发送通知
+		if (!isPageActive.value && data.data!.userName != userName.value) {
 			customNotify.send(`${data.data!.userName}加入了聊天室`)
 		}
 		return
@@ -470,7 +544,7 @@ const handleMessage = (data: SocketDataType) => {
 			timestamp: data.data!.timeStamp,
 			isNotify: true
 		})
-		if (!isPageActive.value) {
+		if (!isPageActive.value && data.data!.userName != userName.value) {
 			customNotify.send(`${data.data!.userName}退出了聊天室`)
 		}
 		return
@@ -500,6 +574,19 @@ const handleMessage = (data: SocketDataType) => {
 		})
 		if (!isPageActive.value) {
 			customNotify.send(`${data.data!.userName}发送了文件：${data.data!.fileName}`)
+		}
+		return
+	}
+	//有人发送代码
+	if (data.cmd == 'code') {
+		messageList.value.push({
+			userName: data.data!.userName,
+			code: data.data!.code,
+			timestamp: data.data!.timeStamp,
+			isNotify: false
+		})
+		if (!isPageActive.value) {
+			customNotify.send(`${data.data!.userName}发送了一段代码`)
 		}
 		return
 	}
@@ -673,6 +760,25 @@ onBeforeUnmount(() => {
 							white-space: pre-wrap;
 						}
 
+						.chat-records-code {
+							display: block;
+							width: 100%;
+							padding: 0 15px;
+
+							span {
+								color: #f30;
+								opacity: 0.8;
+								transition: all 200ms;
+								display: inline-block;
+
+								&:hover {
+									cursor: pointer;
+									text-decoration: underline;
+									opacity: 1;
+								}
+							}
+						}
+
 						.chat-records-file {
 							display: block;
 							width: 100%;
@@ -712,10 +818,6 @@ onBeforeUnmount(() => {
 						&:last-child {
 							margin-bottom: 0;
 						}
-					}
-
-					&:not(:hover)::-webkit-scrollbar {
-						display: none;
 					}
 				}
 
@@ -895,6 +997,25 @@ onBeforeUnmount(() => {
 				font-size: 14px;
 				padding-left: 10px;
 				white-space: pre-wrap;
+			}
+
+			.chatm-records-code {
+				display: block;
+				width: 100%;
+				padding: 0 15px;
+
+				span {
+					color: #f30;
+					opacity: 0.8;
+					transition: all 200ms;
+					display: inline-block;
+
+					&:hover {
+						cursor: pointer;
+						text-decoration: underline;
+						opacity: 1;
+					}
+				}
 			}
 
 			.chatm-records-file {
