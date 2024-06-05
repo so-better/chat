@@ -78,9 +78,11 @@ class Socket {
 				clearInterval(this.timer)
 				this.timer = null
 			}
-			//非正常情况下关闭需要重新连接
+			//非正常情况下关闭1s后进行重新连接
 			if (event.code != 1000) {
-				this.initSocket(onSuccess, onMessage)
+				setTimeout(() => {
+					this.initSocket(onSuccess, onMessage)
+				}, 1000)
 			}
 		}
 	}

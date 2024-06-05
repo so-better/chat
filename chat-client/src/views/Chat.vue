@@ -12,13 +12,13 @@
 						<div ref="chatRef" class="chat-records">
 							<div class="chat-records-item" v-for="item in messageList">
 								<div v-if="item.isNotify" class="chat-records-notify">
-									<span>{{ dayjs(item.timestamp).format('YYYY-MM-DD hh:mm:ss') }}</span>
+									<span>{{ dayjs(item.timestamp).format('YYYY-MM-DD HH:mm:ss') }}</span>
 									<span>{{ item.message }}</span>
 								</div>
 								<template v-else>
 									<div class="chat-records-header">
 										<span>{{ item.userName }}：</span>
-										<span>{{ dayjs(item.timestamp).format('YYYY-MM-DD hh:mm:ss') }}</span>
+										<span>{{ dayjs(item.timestamp).format('YYYY-MM-DD HH:mm:ss') }}</span>
 									</div>
 									<div v-if="item.message" class="chat-records-message">{{ item.message }}</div>
 									<div v-else-if="item.code" class="chat-records-code">
@@ -113,13 +113,13 @@
 			<div class="chatm-records" ref="chatmRef">
 				<div class="chatm-records-item" v-for="item in messageList">
 					<div v-if="item.isNotify" class="chatm-records-notify">
-						<span>{{ dayjs(item.timestamp).format('YYYY-MM-DD hh:mm:ss') }}</span>
+						<span>{{ dayjs(item.timestamp).format('YYYY-MM-DD HH:mm:ss') }}</span>
 						<span>{{ item.message }}</span>
 					</div>
 					<template v-else>
 						<div class="chatm-records-header">
 							<span>{{ item.userName }}：</span>
-							<span>{{ dayjs(item.timestamp).format('YYYY-MM-DD hh:mm:ss') }}</span>
+							<span>{{ dayjs(item.timestamp).format('YYYY-MM-DD HH:mm:ss') }}</span>
 						</div>
 						<div v-if="item.message" class="chatm-records-message">{{ item.message }}</div>
 						<div v-else-if="item.code" class="chatm-records-code">

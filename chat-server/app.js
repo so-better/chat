@@ -14,6 +14,10 @@ const onMessage = (server, connection, data) => {
 	}
 	//有人加入聊天室
 	if (data.cmd == 'joinChatRoom') {
+		//已经在聊天室内，此时由于断开还没完成就先又加入了
+		if (connection.data && connection.data.name == data.data.name) {
+			return
+		}
 		//绑定数据
 		connection.data = {
 			//用户名称
