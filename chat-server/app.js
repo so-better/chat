@@ -1,5 +1,6 @@
 //引入socket
 const ws = require('nodejs-websocket')
+const { pushHistory, getHistory } = require('./history')
 
 //消息接收
 const onMessage = (server, connection, data) => {
@@ -22,14 +23,19 @@ const onMessage = (server, connection, data) => {
 		}
 		//广播告诉聊天室内的其他人有人加入
 		const connections = server.connections.filter(conn => conn.data?.name == connection.data.name)
+		const history = getHistory(data.data.name)
 		connections.forEach(conn => {
 			send(conn, {
 				cmd: 'joinChatRoom',
 				data: {
 					//加入的人
 					userName: data.data.userName,
+					//加入的时间
+					timeStamp: Date.now(),
 					//在线人员列表
-					userList: connections.map(item => item.data.userName)
+					userList: connections.map(item => item.data.userName),
+					//聊天记录
+					history: history
 				}
 			})
 		})
@@ -39,36 +45,46 @@ const onMessage = (server, connection, data) => {
 	if (data.cmd == 'message') {
 		//广播告诉聊天室内的其他人有新消息
 		const connections = server.connections.filter(conn => conn.data?.name == connection.data.name)
+		const returnData = {
+			//发送消息的人
+			userName: connection.data.userName,
+			//发送消息的时间
+			timeStamp: Date.now(),
+			//发送的消息
+			message: data.data.message
+		}
 		connections.forEach(conn => {
 			send(conn, {
 				cmd: 'message',
-				data: {
-					//发送消息的人
-					userName: connection.data.userName,
-					//发送的消息
-					message: data.data.message
-				}
+				data: returnData
 			})
 		})
+		//消息保存
+		pushHistory(connection.data.name, returnData)
 		return
 	}
 	//有人发送文件
 	if (data.cmd == 'file') {
 		//广播告诉聊天室内的其他人有文件
 		const connections = server.connections.filter(conn => conn.data?.name == connection.data.name)
+		const returnData = {
+			//发送消息的人
+			userName: connection.data.userName,
+			//发送消息的时间
+			timeStamp: Date.now(),
+			//发送的文件信息
+			filePath: data.data.filePath,
+			fileName: data.data.fileName,
+			fileType: data.data.fileType
+		}
 		connections.forEach(conn => {
 			send(conn, {
 				cmd: 'file',
-				data: {
-					//发送消息的人
-					userName: connection.data.userName,
-					//发送的文件信息
-					filePath: data.data.filePath,
-					fileName: data.data.fileName,
-					fileType: data.data.fileType
-				}
+				data: returnData
 			})
 		})
+		//消息保存
+		pushHistory(connection.data.name, returnData)
 		return
 	}
 }
@@ -87,6 +103,8 @@ const onClose = (server, connection) => {
 				data: {
 					//退出的人
 					userName: connection.data.userName,
+					//退出时间
+					timeStamp: Date.now(),
 					//在线人员列表
 					userList: connections.map(item => item.data.userName)
 				}

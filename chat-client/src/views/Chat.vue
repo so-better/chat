@@ -425,13 +425,37 @@ const handleMessage = (data: SocketDataType) => {
 	//有人加入聊天室
 	if (data.cmd == 'joinChatRoom') {
 		userList.value = data.data!.userList as string[]
+		//给新加入的人恢复聊天记录
+		if (data.data!.userName == userName.value) {
+			data.data!.history.forEach((item: any) => {
+				//文件类型消息
+				if (item.filePath) {
+					messageList.value.push({
+						userName: item.userName,
+						fileType: item.fileType,
+						fileName: item.fileName,
+						filePath: item.filePath,
+						timestamp: item.timeStamp,
+						isNotify: false
+					})
+				}
+				//普通消息
+				else {
+					messageList.value.push({
+						userName: item.userName,
+						message: item.message,
+						timestamp: item.timeStamp,
+						isNotify: false
+					})
+				}
+			})
+		}
 		messageList.value.push({
 			userName: data.data!.userName,
 			message: data.data!.userName == userName.value ? '你已加入聊天室' : `${data.data!.userName}加入了聊天室`,
-			timestamp: Date.now(),
+			timestamp: data.data!.timeStamp,
 			isNotify: true
 		})
-		console.log('isPageActive', isPageActive.value)
 		if (!isPageActive.value) {
 			customNotify.send(`${data.data!.userName}加入了聊天室`)
 		}
@@ -443,10 +467,9 @@ const handleMessage = (data: SocketDataType) => {
 		messageList.value.push({
 			userName: data.data!.userName,
 			message: `${data.data!.userName}退出了聊天室`,
-			timestamp: Date.now(),
+			timestamp: data.data!.timeStamp,
 			isNotify: true
 		})
-		console.log('isPageActive', isPageActive.value)
 		if (!isPageActive.value) {
 			customNotify.send(`${data.data!.userName}退出了聊天室`)
 		}
@@ -457,10 +480,9 @@ const handleMessage = (data: SocketDataType) => {
 		messageList.value.push({
 			userName: data.data!.userName,
 			message: data.data!.message,
-			timestamp: Date.now(),
+			timestamp: data.data!.timeStamp,
 			isNotify: false
 		})
-		console.log('isPageActive', isPageActive.value)
 		if (!isPageActive.value) {
 			customNotify.send(`${data.data!.userName}：${data.data!.message}`)
 		}
@@ -473,10 +495,9 @@ const handleMessage = (data: SocketDataType) => {
 			fileType: data.data!.fileType,
 			fileName: data.data!.fileName,
 			filePath: data.data!.filePath,
-			timestamp: Date.now(),
+			timestamp: data.data!.timeStamp,
 			isNotify: false
 		})
-		console.log('isPageActive', isPageActive.value)
 		if (!isPageActive.value) {
 			customNotify.send(`${data.data!.userName}发送了文件：${data.data!.fileName}`)
 		}
@@ -534,7 +555,6 @@ watch(
 
 //监听页面显示隐藏
 Dap.event.on(window, 'visibilitychange', () => {
-	console.log('document.visibilityState', document.visibilityState)
 	isPageActive.value = document.visibilityState == 'visible'
 })
 
