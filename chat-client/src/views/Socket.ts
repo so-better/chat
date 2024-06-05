@@ -63,8 +63,12 @@ class Socket {
 			onMessage(data)
 		}
 		//连接关闭的回调方法
-		this.websocket.onclose = () => {
+		this.websocket.onclose = event => {
 			console.log('%c WebSocket连接关闭', 'color:#7f8b3a')
+			//不是正常关闭则重新连接
+			if (event.code != 1000) {
+				this.initSocket(onSuccess, onMessage)
+			}
 		}
 	}
 

@@ -1,5 +1,3 @@
-import logoSVG from '../assets/logo.svg'
-
 class CustomNotify {
 	constructor() {
 		if ('Notification' in window) {
@@ -17,8 +15,8 @@ class CustomNotify {
 			const notification = new Notification(title, {
 				lang: 'zh-CN',
 				body: body,
-				icon: logoSVG,
-				badge: logoSVG
+				icon: './logo.svg',
+				badge: './logo.svg'
 			})
 			notification.onclick = () => {
 				window.focus()

@@ -32,33 +32,33 @@
 										<a v-else class="chat-records-link" :href="item.filePath" :download="item.fileName" target="_blank">
 											<span>{{ item.fileName }}</span>
 											<!-- pdf -->
-											<img v-if="item.fileType == 'pdf'" src="../assets/file/PDF.svg" />
+											<img v-if="item.fileType == 'pdf'" src="../assets/PDF.svg" />
 											<!-- 7z -->
-											<img v-else-if="item.fileType == '7z'" src="../assets/file/7Z.svg" />
+											<img v-else-if="item.fileType == '7z'" src="../assets/7Z.svg" />
 											<!-- zip -->
-											<img v-else-if="item.fileType == 'zip'" src="../assets/file/ZIP.svg" />
+											<img v-else-if="item.fileType == 'zip'" src="../assets/ZIP.svg" />
 											<!-- doc -->
-											<img v-else-if="item.fileType == 'doc'" src="../assets/file/DOC.svg" />
+											<img v-else-if="item.fileType == 'doc'" src="../assets/DOC.svg" />
 											<!-- docx -->
-											<img v-else-if="item.fileType == 'docx'" src="../assets/file/DOCX.svg" />
+											<img v-else-if="item.fileType == 'docx'" src="../assets/DOCX.svg" />
 											<!-- exe -->
-											<img v-else-if="item.fileType == 'exe'" src="../assets/file/EXE.svg" />
+											<img v-else-if="item.fileType == 'exe'" src="../assets/EXE.svg" />
 											<!-- html -->
-											<img v-else-if="item.fileType == 'html'" src="../assets/file/HTML.svg" />
+											<img v-else-if="item.fileType == 'html'" src="../assets/HTML.svg" />
 											<!-- ppt -->
-											<img v-else-if="item.fileType == 'ppt'" src="../assets/file/PPT.svg" />
+											<img v-else-if="item.fileType == 'ppt'" src="../assets/PPT.svg" />
 											<!-- rar -->
-											<img v-else-if="item.fileType == 'rar'" src="../assets/file/RAR.svg" />
+											<img v-else-if="item.fileType == 'rar'" src="../assets/RAR.svg" />
 											<!-- txt -->
-											<img v-else-if="item.fileType == 'txt'" src="../assets/file/TXT.svg" />
+											<img v-else-if="item.fileType == 'txt'" src="../assets/TXT.svg" />
 											<!-- wps -->
-											<img v-else-if="item.fileType == 'wps'" src="../assets/file/WPS.svg" />
+											<img v-else-if="item.fileType == 'wps'" src="../assets/WPS.svg" />
 											<!-- xls -->
-											<img v-else-if="item.fileType == 'xls'" src="../assets/file/XLS.svg" />
+											<img v-else-if="item.fileType == 'xls'" src="../assets/XLS.svg" />
 											<!-- xlsx -->
-											<img v-else-if="item.fileType == 'xlsx'" src="../assets/file/XLSX.svg" />
+											<img v-else-if="item.fileType == 'xlsx'" src="../assets/XLSX.svg" />
 											<!-- 通用 -->
-											<img v-else src="../assets/file/TONGYONG.svg" />
+											<img v-else src="../assets/TONGYONG.svg" />
 										</a>
 									</div>
 								</template>
@@ -124,33 +124,33 @@
 							<a v-else class="chatm-records-link" :href="item.filePath" :download="item.fileName" target="_blank">
 								<span>{{ item.fileName }}</span>
 								<!-- pdf -->
-								<img v-if="item.fileType == 'pdf'" src="../assets/file/PDF.svg" />
+								<img v-if="item.fileType == 'pdf'" src="../assets/PDF.svg" />
 								<!-- 7z -->
-								<img v-else-if="item.fileType == '7z'" src="../assets/file/7Z.svg" />
+								<img v-else-if="item.fileType == '7z'" src="../assets/7Z.svg" />
 								<!-- zip -->
-								<img v-else-if="item.fileType == 'zip'" src="../assets/file/ZIP.svg" />
+								<img v-else-if="item.fileType == 'zip'" src="../assets/ZIP.svg" />
 								<!-- doc -->
-								<img v-else-if="item.fileType == 'doc'" src="../assets/file/DOC.svg" />
+								<img v-else-if="item.fileType == 'doc'" src="../assets/DOC.svg" />
 								<!-- docx -->
-								<img v-else-if="item.fileType == 'docx'" src="../assets/file/DOCX.svg" />
+								<img v-else-if="item.fileType == 'docx'" src="../assets/DOCX.svg" />
 								<!-- exe -->
-								<img v-else-if="item.fileType == 'exe'" src="../assets/file/EXE.svg" />
+								<img v-else-if="item.fileType == 'exe'" src="../assets/EXE.svg" />
 								<!-- html -->
-								<img v-else-if="item.fileType == 'html'" src="../assets/file/HTML.svg" />
+								<img v-else-if="item.fileType == 'html'" src="../assets/HTML.svg" />
 								<!-- ppt -->
-								<img v-else-if="item.fileType == 'ppt'" src="../assets/file/PPT.svg" />
+								<img v-else-if="item.fileType == 'ppt'" src="../assets/PPT.svg" />
 								<!-- rar -->
-								<img v-else-if="item.fileType == 'rar'" src="../assets/file/RAR.svg" />
+								<img v-else-if="item.fileType == 'rar'" src="../assets/RAR.svg" />
 								<!-- txt -->
-								<img v-else-if="item.fileType == 'txt'" src="../assets/file/TXT.svg" />
+								<img v-else-if="item.fileType == 'txt'" src="../assets/TXT.svg" />
 								<!-- wps -->
-								<img v-else-if="item.fileType == 'wps'" src="../assets/file/WPS.svg" />
+								<img v-else-if="item.fileType == 'wps'" src="../assets/WPS.svg" />
 								<!-- xls -->
-								<img v-else-if="item.fileType == 'xls'" src="../assets/file/XLS.svg" />
+								<img v-else-if="item.fileType == 'xls'" src="../assets/XLS.svg" />
 								<!-- xlsx -->
-								<img v-else-if="item.fileType == 'xlsx'" src="../assets/file/XLSX.svg" />
+								<img v-else-if="item.fileType == 'xlsx'" src="../assets/XLSX.svg" />
 								<!-- 通用 -->
-								<img v-else src="../assets/file/TONGYONG.svg" />
+								<img v-else src="../assets/TONGYONG.svg" />
 							</a>
 						</div>
 					</template>
@@ -431,6 +431,10 @@ const handleMessage = (data: SocketDataType) => {
 			timestamp: Date.now(),
 			isNotify: true
 		})
+		console.log('isPageActive', isPageActive.value)
+		if (!isPageActive.value) {
+			customNotify.send(`${data.data!.userName}加入了聊天室`)
+		}
 		return
 	}
 	//有人退出聊天室
@@ -442,6 +446,10 @@ const handleMessage = (data: SocketDataType) => {
 			timestamp: Date.now(),
 			isNotify: true
 		})
+		console.log('isPageActive', isPageActive.value)
+		if (!isPageActive.value) {
+			customNotify.send(`${data.data!.userName}退出了聊天室`)
+		}
 		return
 	}
 	//有人发送消息
@@ -452,6 +460,7 @@ const handleMessage = (data: SocketDataType) => {
 			timestamp: Date.now(),
 			isNotify: false
 		})
+		console.log('isPageActive', isPageActive.value)
 		if (!isPageActive.value) {
 			customNotify.send(`${data.data!.userName}：${data.data!.message}`)
 		}
@@ -467,6 +476,7 @@ const handleMessage = (data: SocketDataType) => {
 			timestamp: Date.now(),
 			isNotify: false
 		})
+		console.log('isPageActive', isPageActive.value)
 		if (!isPageActive.value) {
 			customNotify.send(`${data.data!.userName}发送了文件：${data.data!.fileName}`)
 		}
@@ -524,6 +534,7 @@ watch(
 
 //监听页面显示隐藏
 Dap.event.on(window, 'visibilitychange', () => {
+	console.log('document.visibilityState', document.visibilityState)
 	isPageActive.value = document.visibilityState == 'visible'
 })
 
