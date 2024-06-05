@@ -121,10 +121,10 @@ const onMessage = (server, connection, data) => {
 
 //连接关闭
 const onClose = (server, connection) => {
-	console.log('有客户端关闭连接')
 	const name = connection.data?.name
 	//从聊天室退出
 	if (name) {
+		console.log('有客户端关闭连接', name, connection.data?.userName)
 		//广播告诉聊天室内的其他人有人退出
 		const connections = server.connections.filter(conn => conn.data?.name == name)
 		connections.forEach(conn => {
