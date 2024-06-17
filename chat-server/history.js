@@ -5,6 +5,10 @@ const HISTORY_LIST = {}
 const pushHistory = (name, data) => {
 	if (HISTORY_LIST[name]) {
 		HISTORY_LIST[name].push(data)
+		const length = HISTORY_LIST[name].length
+		if (length > 50) {
+			HISTORY_LIST[name] = HISTORY_LIST[name].slice(length - 50, length)
+		}
 	} else {
 		HISTORY_LIST[name] = [data]
 	}
